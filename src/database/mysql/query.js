@@ -1,7 +1,7 @@
 const pool = require('./connection');
 const debug = require('debug')('app:database-mysql');
 
-const exesql = async (sql, params = []) => {
+const executeQuery = async (sql, params = []) => {
     try {
         const [rows] = await pool.execute(sql, params);
         return rows;
@@ -11,6 +11,17 @@ const exesql = async (sql, params = []) => {
     }
 };
 
-module.exports = {
-    exesql
+const findAll = async (sql) => {
+    try {
+        const [rows] = await pool.query(sql);
+        return rows;
+    } catch (error) {
+        debug('Error al ejecutar la consulta MySQL:', error);
+        throw new Error('Error al ejecutar la consulta MySQL');
+    }
+};
+
+module.exports.queryMysql = {
+    executeQuery,
+    findAll
 };

@@ -1,44 +1,24 @@
-const { exesql } = require('../database/mysql/query');
-const UserModel = require('../model/user/mongoUser');
+const { queryMysql } = require('../../database/mysql/query');
+const UserModel = require('./mongoUser');
 const debug = require('debug')('app:service-user');
 
-const getUserById = async (id) => {
+const registerUser = async (data) => {
     try {
-        // Consulta en MySQL
-        const sql = 'SELECT * FROM usuarios WHERE id = ?';
-        const [userMySQL] = await exesql(sql, [id]);
-        
-        // Consulta en MongoDB
-        const userMongoDB = await UserModel.findById(id);
+        // 1. Registrar el usuario en MySQL
+        const sql = 'INSERT INTO usuarios (nombre, email, contrasena, rol, documento, fecha_creacion) VALUES (?, ?, ?, ?, ?, NOW())';
+        await queryMysql.executeQuery(sql, [data.nombre, data.email, data.contrasena, data.rol, data.documento]);
 
-        return {
-            userMySQL: userMySQL || null,
-            userMongoDB: userMongoDB || null
-        };
-    } catch (error) {
-        debug('Error en el servicio de usuario:', error);
-        throw new Error('Error al obtener el usuario');
-    }
-};
-
-const createUser = async (data) => {
-    try {
-        // Crear usuario en MySQL
-        const sql = 'INSERT INTO usuarios (nombre, email, rol) VALUES (?, ?, ?)';
-        await exesql(sql, [data.nombre, data.email, data.rol]);
-
-        // Crear usuario en MongoDB
+        // 2. Registrar el usuario en MongoDB
         const newUser = new UserModel(data);
         await newUser.save();
 
-        return { message: 'Usuario creado en ambas bases de datos' };
+        return { message: 'Usuario registrado exitosamente', user: newUser };
     } catch (error) {
-        debug('Error al crear el usuario:', error);
-        throw new Error('Error al crear el usuario en las bases de datos');
+        debug('Error al registrar usuario:', error);
+        throw new Error('Error al registrar usuario');
     }
 };
 
 module.exports.userService = {
-    getUserById,
-    createUser
+    registerUser
 };

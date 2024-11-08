@@ -1,3 +1,4 @@
+require('./connection');
 const debug = require('debug')('app:database-mongodb');
 
 const findDocumentById = async (Model, id) => {
@@ -5,8 +6,8 @@ const findDocumentById = async (Model, id) => {
         const document = await Model.findById(id);
         return document;
     } catch (error) {
-        debug('Error en la consulta MongoDB:', error);
-        throw new Error('Error al obtener el documento');
+        debug('Error al obtener el documento por ID:', error);
+        throw new Error('Error al obtener el documento por ID');
     }
 };
 
@@ -15,8 +16,8 @@ const findDocuments = async (Model, query = {}, projection = {}) => {
         const documents = await Model.find(query, projection);
         return documents;
     } catch (error) {
-        debug('Error en la consulta MongoDB:', error);
-        throw new Error('Error al obtener los documentos');
+        debug('Error al obtener documentos:', error);
+        throw new Error('Error al obtener documentos');
     }
 };
 
@@ -26,8 +27,8 @@ const createDocument = async (Model, data) => {
         await document.save();
         return document;
     } catch (error) {
-        debug('Error al crear el documento en MongoDB:', error);
-        throw new Error('Error al crear el documento');
+        debug('Error al crear documento:', error);
+        throw new Error('Error al crear documento');
     }
 };
 

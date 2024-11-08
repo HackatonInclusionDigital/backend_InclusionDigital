@@ -3,9 +3,7 @@ const { userController } = require('./controller');
 
 const router = express.Router();
 
-module.exports.UsersAPI = (app) => {
-    router.get('/:id', userController.getUser);
-    router.post('/', userController.createUserHandler);
-
+module.exports.UserAPI = (app) => {
+    router.post('/register', userController.registerUserHandler);
     app.use('/api/users', router);
 };

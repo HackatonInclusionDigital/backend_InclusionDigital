@@ -8,19 +8,27 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
-        match: /.+\@.+\..+/
+        unique: true
+    },
+    contrasena: {
+        type: String,
+        required: true
     },
     rol: {
         type: String,
-        enum: ['emprendedora', 'compradora'],
+        enum: ['emprendedora', 'compradora'], // Puedes ajustar los roles según tu aplicación
         required: true
     },
-    fecha_registro: {
+    documento: {
+        type: String, // Representa el DNI u otro identificador único del usuario
+        required: true,
+        unique: true
+    },
+    fecha_creacion: {
         type: Date,
         default: Date.now
     }
 });
 
-const UserModel = mongoose.model('User', userSchema);
+const UserModel = mongoose.model('usuarios', userSchema);
 module.exports = UserModel;

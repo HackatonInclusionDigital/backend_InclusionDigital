@@ -2,10 +2,14 @@ const express = require('express');
 const debug = require('debug')('app:main');
 const http = require('http');
 const cors = require('cors');
+const helmet = require('helmet');
 
 const { Config } = require('./src/config/index');
 const createError = require('http-errors');
 const { Response } = require('./src/common/response');
+
+// require('./src/database/mysql/connection'); // Inicializa la conexión a MySQL
+// require('./src/database/mongodb/connection'); // Inicializa la conexión a MongoDB
 
 const app = express();
 
@@ -19,7 +23,10 @@ app.use(cors());
 app.use(express.json());
 
 // Importar rutas de la API
-
+const { ProductAPI } = require('./src/model/product/index');
+const { UserAPI } = require('./src/model/user/index');
+ProductAPI(app);
+UserAPI(app);
 
 // Middlewares de manejo de errores
 app.use(logErrors);
@@ -47,6 +54,6 @@ function errorHandler(err, req, res, next) {
 }
 
 // Iniciar el servidor
-const server = http.createServer(app).listen(Config.port, () => {
+const server = http.createServer(app).listen(Config.port, '0.0.0.0', () => {
     debug(`Servidor escuchando en el puerto ${Config.port}`);
 });
