@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
+    documento: {
+        type: String,
+        required: true,
+        unique: true
+    },
     nombre: {
         type: String,
         required: true
@@ -10,19 +15,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    contrasena: {
-        type: String,
-        required: true
-    },
     rol: {
         type: String,
-        enum: ['emprendedora', 'compradora'], // Puedes ajustar los roles según tu aplicación
-        required: true
-    },
-    documento: {
-        type: String, // Representa el DNI u otro identificador único del usuario
         required: true,
-        unique: true
+        enum: ['vendedora', 'comprador'] // Puedes agregar más roles según tu caso
     },
     fecha_creacion: {
         type: Date,

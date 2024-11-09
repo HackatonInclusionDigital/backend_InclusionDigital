@@ -7,6 +7,7 @@ const moment = require('moment');
 const registerUserHandler = async (req, res) => {
     try {
         const data = req.body;
+        debug('Datos de registro:', data);
 
         if (!data.documento) {
             throw new Error('El campo documento es requerido');

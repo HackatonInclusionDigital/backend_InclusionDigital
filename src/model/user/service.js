@@ -9,7 +9,12 @@ const registerUser = async (data) => {
         await queryMysql.executeQuery(sql, [data.nombre, data.email, data.contrasena, data.rol, data.documento]);
 
         // 2. Registrar el usuario en MongoDB
-        const newUser = new UserModel(data);
+        const newUser = new UserModel({
+            documento: data.documento,
+            nombre: data.nombre,
+            email: data.email,
+            rol: data.rol
+        });
         await newUser.save();
 
         return { message: 'Usuario registrado exitosamente', user: newUser };

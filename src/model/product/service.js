@@ -7,16 +7,13 @@ const debug = require('debug')('app:service-product');
 const getAllProducts = async () => {
     try {
         // Consulta en MySQL
-        const sql = 'SELECT * FROM productos';
-        const productsMySQL = await queryMysql.findAll(sql);
+        // const sql = 'SELECT * FROM productos';
+        // const productsMySQL = await queryMysql.findAll(sql);
 
         // Consulta en MongoDB
         const productsMongoDB = await queryMongodb.findDocuments(ProductModel);
 
-        return {
-            productsMySQL,
-            productsMongoDB
-        };
+        return productsMongoDB;
     } catch (error) {
         debug('Error al obtener productos:', error);
         throw new Error('Error al obtener productos');
