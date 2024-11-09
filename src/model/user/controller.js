@@ -4,10 +4,24 @@ const { Response } = require('../../common/response');
 const debug = require('debug')('app:controller-user');
 const moment = require('moment');
 
+const loginHandler = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            throw new Error('Email y contraseña son requeridos');
+        }
+        const result = await userService.loginUser(email, password);
+        Response.success(res, 200, 'Inicio de sesión exitoso', result);
+    } catch (error) {
+        Response.error(res, { statusCode: 401, message: error.message });
+    }
+};
+
 const registerUserHandler = async (req, res) => {
     try {
         const data = req.body;
-        debug('Datos de registro:', data);
+        // debug('Datos de registro:', data);
 
         if (!data.documento) {
             throw new Error('El campo documento es requerido');
@@ -40,5 +54,6 @@ const registerUserHandler = async (req, res) => {
     }
 };
 module.exports.userController = {
+    loginHandler,
     registerUserHandler
 };

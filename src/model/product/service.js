@@ -20,6 +20,21 @@ const getAllProducts = async () => {
     }
 };
 
+const getProductById = async (id) => {
+    try {
+        const productMongoDB = await ProductModel.findById(id);
+
+        if (!productMongoDB) {
+            throw new Error('Producto no encontrado');
+        }
+
+        return productMongoDB;
+    } catch (error) {
+        debug('Error al recuperar producto de MongoDB:', error);
+        throw new Error('Error al recuperar el producto de MongoDB');
+    }
+};
+
 const createProduct = async (data) => {
     try {
         // Verificar si el `id` del usuario se pasa en la solicitud
@@ -59,5 +74,6 @@ const createProduct = async (data) => {
 
 module.exports.productService = {
     getAllProducts,
+    getProductById,
     createProduct
 };

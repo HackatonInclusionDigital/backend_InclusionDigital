@@ -3,6 +3,7 @@ const debug = require('debug')('app:main');
 const http = require('http');
 const cors = require('cors');
 const helmet = require('helmet');
+const path = require('path');
 
 const { Config } = require('./src/config/index');
 const createError = require('http-errors');
@@ -13,11 +14,18 @@ const { Response } = require('./src/common/response');
 
 const app = express();
 
+// Servir la carpeta 'uploads' de manera estática
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Middlewares de seguridad
 app.use(helmet());
 
 // Habilitar CORS
-app.use(cors());
+app.use(cors({
+    origin: '*', // Permitir solicitudes desde cualquier origen
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Parsear JSON
 app.use(express.json());

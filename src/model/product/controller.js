@@ -11,9 +11,27 @@ const getProducts = async (req, res) => {
     }
 };
 
+const getProductByIdHandler = async (req, res) => {
+    try {
+        const { id } = req.params;
+        // debug('ID del producto:', id);
+        const product = await productService.getProductById(id);
+
+        Response.success(res, 200, 'Producto encontrado', product);
+    } catch (error) {
+        Response.error(res, { statusCode: 404, message: error.message });
+    }
+};
+
 const createProductHandler = async (req, res) => {
     try {
         const data = req.body;
+
+        // Verificar si hay imágenes subidas
+        if (req.files && req.files.length > 0) {
+            data.imagenes = req.files.map(file => file.path); // Agregar las rutas de las imágenes al objeto `data`
+        }
+
         await productService.createProduct(data);
         Response.success(res, 201, 'Producto creado en ambas bases de datos');
     } catch (error) {
@@ -23,5 +41,6 @@ const createProductHandler = async (req, res) => {
 
 module.exports.productController = {
     getProducts,
+    getProductByIdHandler,
     createProductHandler
 };

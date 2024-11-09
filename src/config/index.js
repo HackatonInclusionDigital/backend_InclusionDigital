@@ -16,5 +16,6 @@ module.exports.Config = {
         password: process.env.MONGODB_PASSWORD || "",
     },
     // Token apis
-    tokendni: process.env.TOKEN_DNI || ""
+    tokendni: process.env.TOKEN_DNI || "",
+    jwtSecret: process.env.JWT_SECRET || 'claveSecretaSuperSegura',
 };

@@ -28,6 +28,10 @@ const productSchema = new mongoose.Schema({
         ref: 'usuarios',
         required: true
     },
+    imagenes: {
+        type: [String], // Array de strings para almacenar rutas o URLs de imágenes
+        default: [],
+    },
     fecha_creacion: {
         type: Date,
         default: Date.now
